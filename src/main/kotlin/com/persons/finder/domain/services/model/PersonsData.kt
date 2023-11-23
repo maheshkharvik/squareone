@@ -1,7 +1,7 @@
 
-package com.persons.finder.domain.services
+package com.persons.finder.domain.services.model
 
-import com.persons.finder.presentation.PersonsDTO
+import com.persons.finder.presentation.model.PersonsDTO
 
 data class PersonsData(
         // Tip: Person's id can be used for this field

@@ -30,7 +30,7 @@ data class LocationResponse(
         val longitude: Double
 )
 
-fun LocationsEntity.toResponse()=LocationResponse(
+fun LocationsEntity.toResponse()= LocationResponse(
         Id=id,
         referenceId=referenceId,
         latitude=latitude,

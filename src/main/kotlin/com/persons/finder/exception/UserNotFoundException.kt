@@ -1,4 +1,5 @@
 package com.persons.finder.exception
 
-class UserNotFoundException {
-}
+import org.springframework.http.HttpStatus
+
+class UserNotFoundException (val statuscode:HttpStatus,val reason:String) :Exception()

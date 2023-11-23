@@ -1,42 +1,72 @@
 package com.persons.finder.presentation
 
+import com.persons.finder.domain.services.LocationsService
+import com.persons.finder.domain.services.PersonsService
+import com.persons.finder.presentation.model.PersonsDTO
+import com.persons.finder.repository.model.LocationsEntity
+import com.persons.finder.repository.model.PersonsEntity
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/v1/persons")
 class PersonController @Autowired constructor() {
 
-    /*
-        TODO PUT API to update/create someone's location using latitude and longitude
-        (JSON) Body
-     */
+    @Autowired
+    private val personsService: PersonsService? = null
+
+    @Autowired
+    private val locationsService: LocationsService? = null
 
     /*
-        TODO POST API to create a 'person'
-        (JSON) Body and return the id of the created entity
+    * POST API to create a 'person'
+    *
+    * */
+    @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveUser(@Validated @RequestBody payload: PersonsEntity): PersonsEntity = personsService!!.save(payload)
+
+    /*
+       PUT API to update/create someone's location using latitude and longitude
+    */
+    @PutMapping("/createLocation")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveLocation(@Validated @RequestBody payload: LocationsEntity): LocationsEntity = locationsService!!.addLocation(payload)
+
+    @GetMapping("/getLocations")
+    @ResponseBody
+    fun getAllLocations( ): List<LocationsEntity> {
+        return locationsService!!.getAllLocations()
+    }
+    /*
+    GET API to retrieve a person or persons name using their ids
     */
 
-    /*
-        TODO GET API to retrieve people around query location with a radius in KM, Use query param for radius.
-        TODO API just return a list of persons ids (JSON)
-        // Example
-        // John wants to know who is around his location within a radius of 10km
-        // API would be called using John's id and a radius 10km
-     */
+    @GetMapping("/getUser/{id}")
+    @ResponseBody
+    fun getUserById( @PathVariable id: Long ): PersonsEntity {
+        return personsService!!.getPersonById(id);
+    }
 
     /*
-        TODO GET API to retrieve a person or persons name using their ids
-        // Example
-        // John has the list of people around them, now they need to retrieve everybody's names to display in the app
-        // API would be called using person or persons ids
-     */
+    GET API to retrieve people around query location with a radius in KM, Use query param for radius. Extra challenge: Return list ordered by distance to each person.
+    */
+    @GetMapping("/getClosestLocations/{id}")
+    @ResponseBody
+    fun getClosesetLocations(@RequestParam radius: Double,@PathVariable id: Long ): List<PersonsDTO>  {
+        val personsList=locationsService!!.findPersonNearestLocations(radius,id);
+        val nearestPersonsList: MutableList<PersonsDTO> = mutableListOf()
+        val iterator= personsList.listIterator();
 
-    @GetMapping("")
-    fun getExample(): String {
-        return "Hello Example"
+       while (iterator.hasNext()){
+           val persondata=iterator.next();
+           val personDTO = PersonsDTO.from(persondata)
+           nearestPersonsList.add(personDTO);
+       }
+        return nearestPersonsList;
+
     }
 
 }

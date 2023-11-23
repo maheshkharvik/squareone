@@ -1,6 +1,6 @@
-package com.persons.finder.presentation
+package com.persons.finder.presentation.model
 
-import com.persons.finder.domain.services.PersonsData
+import com.persons.finder.domain.services.model.PersonsData
 
 class PersonsDTO
 (

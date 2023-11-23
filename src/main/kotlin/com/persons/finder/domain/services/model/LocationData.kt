@@ -1,6 +1,6 @@
-package com.persons.finder.domain.services
+package com.persons.finder.domain.services.model
 
-import com.persons.finder.presentation.LocationDto
+import com.persons.finder.presentation.model.LocationDto
 import com.persons.finder.repository.model.LocationsEntity
 
 data class locationData (

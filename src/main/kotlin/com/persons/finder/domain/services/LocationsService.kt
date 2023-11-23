@@ -1,9 +1,11 @@
 package com.persons.finder.domain.services
+import com.persons.finder.domain.services.model.PersonsData
+import com.persons.finder.repository.model.LocationsEntity
 
-import com.persons.finder.data.Location
 
 interface LocationsService {
-    fun addLocation(location: Location)
+    fun addLocation(location: LocationsEntity): LocationsEntity
     fun removeLocation(locationReferenceId: Long)
-    fun findAround(latitude: Double, longitude: Double, radiusInKm: Double) : List<Location>
+    fun findPersonNearestLocations(radiusInKm: Double, id: Long):MutableList<PersonsData>
+     fun getAllLocations():List<LocationsEntity>
 }
